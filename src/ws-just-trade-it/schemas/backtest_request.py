@@ -8,14 +8,19 @@ AVAILABLE_ANALYSIS = ["MACRO", "MICRO"]
 
 
 class BacktestRequest(BaseModel):
-    code: str = Field(..., description="Your startegy implementation which should be a sub-class of Strategy")
+    code: str = Field(
+        ...,
+        description="Your startegy implementation which should be a sub-class of Strategy",
+    )
     analysis_type: Optional[str] = Field(
-        default="MACRO", description="Two availble types of analysis: MACRO & MICRO")
+        default="MACRO", description="Two availble types of analysis: MACRO & MICRO"
+    )
     stock_name: Optional[str] = Field(
-        default="msft", description="The name of the stock to backtest")
+        default="msft", description="The name of the stock to backtest"
+    )
 
     @validator("stock_name")
-    def validate_stock_name(cls, v):
+    def validate_stock_name(cls, v): # noqa:  B902
         with open("stocks/stocks_names.txt") as f:
             stocks_names = f.readlines()
             if v not in stocks_names:
@@ -23,7 +28,7 @@ class BacktestRequest(BaseModel):
                 raise StockNameDoesNotExist(msg)
 
     @validator("analysis_type")
-    def validate_analysis_type(cls, v):
+    def validate_analysis_type(cls, v): # noqa:  B902
         if v not in AVAILABLE_ANALYSIS:
             msg = f"Please provide one of the following Analysis {AVAILABLE_ANALYSIS}"
             raise AnalysisTypeDoesNotExist(msg)
