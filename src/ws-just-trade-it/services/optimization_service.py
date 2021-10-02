@@ -1,0 +1,2 @@
+class OptimizationService:
+    pass
