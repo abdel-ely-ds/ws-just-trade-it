@@ -8,7 +8,7 @@ from tradeit import Strategy
 CUSTOM_STRATEGIES_FOLDER = "custom_strategies"
 
 
-def load_latest_strategy() -> Type[Strategy]:
+def get_latest_strategy() -> Type[Strategy]:
     strategy_name = get_latest_added_file()
     python_module = importlib.import_module(
         os.path.join(CUSTOM_STRATEGIES_FOLDER, strategy_name)
