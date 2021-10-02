@@ -1,2 +1,0 @@
-class BacktestService:
-    pass
