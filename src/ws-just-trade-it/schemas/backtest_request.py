@@ -7,7 +7,7 @@ from .exceptions import AnalysisTypeDoesNotExist, StockNameDoesNotExist
 AVAILABLE_ANALYSIS = ["MACRO", "MICRO"]
 
 
-class Request(BaseModel):
+class BacktestRequest(BaseModel):
     code: str = Field(..., description="Your startegy implementation which should be a sub-class of Strategy")
     analysis_type: Optional[str] = Field(
         default="MACRO", description="Two availble types of analysis: MACRO & MICRO")
