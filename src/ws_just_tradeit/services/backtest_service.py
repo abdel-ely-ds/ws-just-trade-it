@@ -16,4 +16,4 @@ def backtest(
         strategy=strategy, analysis_type=analysis_type, log_folder=LOG_FOLDER
     )
 
-    return btw.run(os.path.join(stock_name), plot=plot)
+    return btw.run(os.path.join(STOCK_PATH, stock_name), plot=plot)
