@@ -1,19 +1,26 @@
 import os
 from typing import Type
+from abc import ABC
 
 import pandas as pd
-from tradeit.backtester import BacktestWrapper, Strategy
+
+# from tradeit.backtester import BacktestWrapper, Strategy
 
 LOG_FOLDER = "/tmp/logs"
 STOCKS_PATH = "stocks"
 
 
-def backtest(
-    strategy: Type[Strategy], analysis_type: str, stock_name, plot=False
-) -> pd.DataFrame:
+class Strategy(ABC):
+    pass
 
-    btw = BacktestWrapper(
-        strategy=strategy, analysis_type=analysis_type, log_folder=LOG_FOLDER
-    )
 
-    return btw.run(os.path.join(STOCKS_PATH, stock_name), plot=plot)
+class BacktestService:
+    @staticmethod
+    def run(
+        strategy: Type[Strategy],
+        analysis_type: str = "MACRO",
+        stock_name: str = "msft",
+        plot=False,
+    ) -> dict:
+        columns = ["1", "2", "3"]
+        return pd.DataFrame(columns=columns).to_dict()

@@ -1,15 +1,20 @@
+import os
 from typing import Optional
 
 from pydantic import BaseModel, Field, validator
 
-from .exceptions import AnalysisTypeDoesNotExist, StockNameDoesNotExist
+from ws_just_tradeit.exceptions import AnalysisTypeDoesNotExist, StockNameDoesNotExist
 
 AVAILABLE_ANALYSIS = ["MACRO", "MICRO"]
+FILE_NAME = "dummy_strategy.py"
+HOME = r"C:\Users\abdel\Desktop\Workspace\ws-just-trade-it\src\ws_just_tradeit"
+with open(os.path.join(HOME, FILE_NAME), "r") as file:
+    STRING_CODE = file.read()
 
 
 class BacktestRequest(BaseModel):
     strategy_code: str = Field(
-        ...,
+        default=STRING_CODE,
         description="Your strategy implementation which should be a sub-class of Strategy",
     )
     analysis_type: Optional[str] = Field(

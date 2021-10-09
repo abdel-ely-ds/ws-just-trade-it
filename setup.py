@@ -1,4 +1,3 @@
-import setuptools
 from setuptools import setup
 
 TEST_DEPS = ["pytest==5.0.1", "pytest-runner==5.1", "pytest-cov==2.7.1", "nox"]
@@ -15,9 +14,9 @@ setup(
     classifiers=["Programming Language :: Python :: 3.7"],
     zip_safe=True,
     include_package_data=True,
-    version="1.0.0",
-    packages=["src"],
-    install_requires=["tradeit"],
+    entry_points={"console_scripts": ["ws-just-tradeit=ws_just_tradeit.main:main"]},
+    package_dir={"": "src"},
+    install_requires=["uvicorn", "fastapi"],
     tests_require=TEST_DEPS,
     extras_require={"test": TEST_DEPS},
 )

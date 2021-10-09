@@ -1,1 +1,1 @@
-from .backtest_service import backtest
+from .backtest_service import BacktestService
