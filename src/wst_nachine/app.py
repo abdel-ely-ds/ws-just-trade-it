@@ -55,11 +55,10 @@ def index(request: StarletteRequest) -> str:
 @app.post("/backtest", response_model=BacktestResponse, status_code=200)
 async def backtest(backtest_request: BacktestRequest, backtester: BacktestService = Depends()) -> BacktestResponse:
     save_to_python_file(strategy_code=backtest_request.strategy_code)
-    custom_strategy = get_latest_strategy()
     return BacktestResponse.parse_obj(
         {
             "backtest_results": backtester.run(
-                strategy=custom_strategy,
+                strategy=get_latest_strategy(),
                 stock_name=backtest_request.stock_name,
             )
         }
