@@ -3,3 +3,4 @@
 __pycache__/
 .nox/
 .mypy_cache/
+src/wst_nachine/stocks

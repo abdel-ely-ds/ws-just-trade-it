@@ -1,21 +1,19 @@
 import os
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.responses import HTMLResponse
-from ws_just_tradeit.schemas import BacktestRequest, BacktestResponse
-from ws_just_tradeit.services.backtest_service import BacktestService
-from ws_just_tradeit.utils.handle_backtest_request import (
+from wst_nachine.schemas import BacktestRequest, BacktestResponse
+from wst_nachine.services.backtest_service import BacktestService
+from wst_nachine.utils.handle_backtest_request import (
     get_latest_strategy,
     save_to_python_file,
 )
 
 from starlette.requests import Request as StarletteRequest
 
-from ws_just_tradeit.core.settings import settings
+from wst_nachine.core.settings import settings
 
 from fastapi.middleware.cors import CORSMiddleware
-
-backtest_service = BacktestService()
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -55,16 +53,16 @@ def index(request: StarletteRequest) -> str:
 
 
 @app.post("/backtest", response_model=BacktestResponse, status_code=200)
-async def backtest(backtest_request: BacktestRequest) -> BacktestResponse:
+async def backtest(backtest_request: BacktestRequest, backtester: BacktestService = Depends()) -> BacktestResponse:
     save_to_python_file(strategy_code=backtest_request.strategy_code)
     custom_strategy = get_latest_strategy()
-
-    return BacktestResponse.parse_obj(
-        {
-            "backtest_results": backtest_service.run(
+    print(backtest_request)
+    results = backtester.run(
                 strategy=custom_strategy,
-                analysis_type=backtest_request.analysis_type,
                 stock_name=backtest_request.stock_name,
             )
+    return BacktestResponse.parse_obj(
+        {
+            "backtest_results": results
         }
     )
