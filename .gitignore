@@ -4,3 +4,4 @@ __pycache__/
 .nox/
 .mypy_cache/
 src/wst_nachine/stocks
+src/wst_nachine/custom_strategies

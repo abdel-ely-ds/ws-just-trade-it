@@ -1,5 +1,3 @@
-import os
-
 import uvicorn
 
 entry_point = "app:app"

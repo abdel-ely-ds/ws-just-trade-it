@@ -1,19 +1,17 @@
 import os
 
-from fastapi import FastAPI, Depends
+from fastapi import Depends, FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
+from starlette.requests import Request as StarletteRequest
+
+from wst_nachine.core.settings import settings
 from wst_nachine.schemas import BacktestRequest, BacktestResponse
 from wst_nachine.services.backtest_service import BacktestService
 from wst_nachine.utils.handle_backtest_request import (
     get_latest_strategy,
     save_to_python_file,
 )
-
-from starlette.requests import Request as StarletteRequest
-
-from wst_nachine.core.settings import settings
-
-from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -53,7 +51,9 @@ def index(request: StarletteRequest) -> str:
 
 
 @app.post("/backtest", response_model=BacktestResponse, status_code=200)
-async def backtest(backtest_request: BacktestRequest, backtester: BacktestService = Depends()) -> BacktestResponse:
+async def backtest(
+    backtest_request: BacktestRequest, backtester: BacktestService = Depends()
+) -> BacktestResponse:
     save_to_python_file(strategy_code=backtest_request.strategy_code)
     return BacktestResponse.parse_obj(
         {
