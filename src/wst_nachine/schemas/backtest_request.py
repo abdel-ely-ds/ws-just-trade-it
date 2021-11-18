@@ -1,5 +1,5 @@
 import os
-
+from typing import Optional
 from pydantic import BaseModel, Field, validator
 
 from wst_nachine.exceptions import StockNameDoesNotExist
@@ -20,7 +20,7 @@ class BacktestRequest(BaseModel):
         description="Your strategy implementation which should be a sub-class of Strategy",
     )
 
-    stock_name: str = Field(
+    stock_name: Optional[str] = Field(
         default="msft", description="The name of the stock to backtest"
     )
 
