@@ -10,8 +10,6 @@ SUFFIX_STOCK_NAMES = "us.txt"
 COLUMNS_TO_RETURN = [
     "Symbol",
     "Size",
-    "SlPrice",
-    "TpPrice",
     "EntryPrice",
     "ExitPrice",
     "PnL",
@@ -38,4 +36,6 @@ class BacktestService:
         )
         results.fillna("None", inplace=True)
         results = results[columns_to_return]
-        return results.to_dict()
+        results.EntryTime = results.EntryTime.dt.strftime("%Y-%m-%d")
+        results.ExitTime = results.ExitTime.dt.strftime("%Y-%m-%d")
+        return results.to_json(orient="records")

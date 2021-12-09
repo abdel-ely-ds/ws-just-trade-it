@@ -9,7 +9,7 @@ from t_nachine.backtester import Strategy
 from wst_nachine.exceptions.exceptions import StrategyNotImplemented
 
 CUSTOM_STRATEGIES_FOLDER = r"custom_strategies"
-HOME = "."
+HOME = ".."
 
 
 def create_custom_strategies_directory() -> None:
@@ -41,7 +41,7 @@ def save_to_python_file(strategy_code: str) -> None:
         key_word = "(Strategy)"
         strategy_name = strategy_code[: strategy_code.index(key_word)].split(" ")[-1]
         with open(
-            os.path.join(CUSTOM_STRATEGIES_FOLDER, strategy_name + ".py"), "w"
+            os.path.join(HOME, CUSTOM_STRATEGIES_FOLDER, strategy_name + ".py"), "w"
         ) as f:
             f.write(strategy_code)
     except ValueError:

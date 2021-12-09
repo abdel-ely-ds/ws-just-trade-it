@@ -55,6 +55,7 @@ async def run(
     backtest_request: BacktestRequest, backtester: BacktestService = Depends()
 ) -> BacktestResponse:
     save_to_python_file(strategy_code=backtest_request.strategy_code)
+
     return BacktestResponse.parse_obj(
         {
             "backtest_results": backtester.run(
