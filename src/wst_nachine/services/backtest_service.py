@@ -3,19 +3,11 @@ from typing import Type, List
 
 import pandas as pd
 from t_nachine.backtester import Backtest, Strategy
+from t_nachine.optimization import Analyzer
 
 LOG_FOLDER = "/tmp/logs"
 STOCKS_PATH = "stocks/"
 SUFFIX_STOCK_NAMES = "us.txt"
-COLUMNS_TO_RETURN = [
-    "Symbol",
-    "Size",
-    "EntryPrice",
-    "ExitPrice",
-    "PnL",
-    "EntryTime",
-    "ExitTime",
-]
 
 
 class BacktestService:
@@ -23,19 +15,28 @@ class BacktestService:
         self.bt = Backtest(cash=10_000)
 
     def run(
-        self,
-        strategy: Type[Strategy],
-        stock_name: str = "msft",
-        columns_to_return: List[str] = None,
+            self,
+            strategy: Type[Strategy],
+            stock_name: str = "msft",
     ) -> dict:
-        if columns_to_return is None:
-            columns_to_return = COLUMNS_TO_RETURN
         results: pd.DataFrame = self.bt.run(
             strategy=strategy,
             stock_path=os.path.join(STOCKS_PATH, f"{stock_name}.{SUFFIX_STOCK_NAMES}"),
         )
         results.fillna("None", inplace=True)
-        results = results[columns_to_return]
-        results.EntryTime = results.EntryTime.dt.strftime("%Y-%m-%d")
-        results.ExitTime = results.ExitTime.dt.strftime("%Y-%m-%d")
-        return results.to_json(orient="records")
+        results = results
+        analyzer = Analyzer(results)
+
+        return {
+            "first_trade": analyzer.first_entry_time,
+            "last_trade": analyzer.last_entry_time,
+            "exposure_time": analyzer.average_exposure_time,
+            "nb_trades": analyzer.nb_trades,
+            "win_rate": analyzer.win_rate,
+            "profit_factor": analyzer.profit_factor,
+            "pct_return": analyzer.pct_return,
+            "worst_trade": analyzer.worst_trade,
+            "best_trade": analyzer.best_trade,
+            "win_10_streak": analyzer.winning_streak_probability(),
+            "lost_10_streak": analyzer.losing_streak_probability(),
+        }
