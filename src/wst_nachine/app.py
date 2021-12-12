@@ -57,10 +57,8 @@ async def run(
     save_to_python_file(strategy_code=backtest_request.strategy_code)
 
     return BacktestResponse.parse_obj(
-        {
-            "backtest_results": backtester.run(
-                strategy=get_latest_strategy(),
-                stock_name=backtest_request.stock_name,
-            )
-        }
+        backtester.run(
+            strategy=get_latest_strategy(),
+            stock_name=backtest_request.stock_name,
+        )
     )
