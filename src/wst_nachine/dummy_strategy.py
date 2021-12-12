@@ -148,3 +148,4 @@ class DummyStrategy(Strategy):
                     setattr(order, "placed_bar", len(self.data))
         except IndexError:
             pass
+
