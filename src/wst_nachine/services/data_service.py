@@ -10,5 +10,7 @@ class DataService:
     suffix_stock_names: str = SUFFIX_STOCK_NAMES
 
     def get_data(self, stock_name: str):
-        df = pd.read_csv(os.path.join(self.stock_path, f"{stock_name}.{self.suffix_stock_names}"))
+        df = pd.read_csv(
+            os.path.join(self.stock_path, f"{stock_name}.{self.suffix_stock_names}")
+        )
         return df.to_json(orient="records")

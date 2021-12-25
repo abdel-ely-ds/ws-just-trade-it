@@ -15,9 +15,9 @@ class BacktestService:
         self.bt = Backtest(cash=10_000)
 
     def run(
-            self,
-            strategy: Type[Strategy],
-            stock_name: str = "msft",
+        self,
+        strategy: Type[Strategy],
+        stock_name: str = "msft",
     ) -> dict:
         results: pd.DataFrame = self.bt.run(
             strategy=strategy,
@@ -28,13 +28,11 @@ class BacktestService:
         analyzer = Analyzer(results)
 
         return {
-            "first_trade": analyzer.first_entry_time,
-            "last_trade": analyzer.last_entry_time,
-            "exposure_time": analyzer.average_exposure_time,
-            "nb_trades": analyzer.nb_trades,
+            "average_duration": analyzer.average_exposure_time,
+            "number_of_trades": analyzer.nb_trades,
             "win_rate": analyzer.win_rate,
             "profit_factor": analyzer.profit_factor,
-            "pct_return": analyzer.pct_return,
+            "return_pct": analyzer.pct_return,
             "worst_trade": analyzer.worst_trade,
             "best_trade": analyzer.best_trade,
             "win_10_streak": analyzer.winning_streak_probability(),
