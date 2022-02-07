@@ -5,9 +5,10 @@ from pydantic import BaseModel, Field, validator
 
 from wst_nachine.exceptions import StockNameDoesNotExist
 
-HOME = "/home/abdelelyds/Workspace/PythonProjects/ws-just-trade-it/src/wst_nachine"  # how to write this better ?
-STOCKS_PATH = "stocks/"
+STOCKS = "stocks"
 SUFFIX_STOCK_NAMES = "us.txt"
+
+STOCKS_PATH = os.path.abspath(STOCKS)
 
 
 class DataRequest(BaseModel):
@@ -17,7 +18,7 @@ class DataRequest(BaseModel):
 
     @validator("stock_name")
     def validate_stock_name(cls, v):  # noqa:  B902
-        stock_names = os.listdir(os.path.join(HOME, STOCKS_PATH))
+        stock_names = os.listdir(STOCKS_PATH)
         if f"{v}.{SUFFIX_STOCK_NAMES}" not in stock_names:
             msg = f"Your stock {v} does not exist in our database"
             raise StockNameDoesNotExist(msg)

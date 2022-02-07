@@ -1,4 +1,5 @@
 import os
+import subprocess
 
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -52,9 +53,22 @@ def index(request: StarletteRequest) -> str:
         """
 
 
+@app.post("/backtest_in_docker", response_model=BacktestResponse, status_code=200)
+async def run(
+        backtest_request: BacktestRequest, backtester: BacktestService = Depends()
+) -> BacktestResponse:
+    save_to_python_file(strategy_code=backtest_request.strategy_code)
+    return BacktestResponse.parse_obj(
+        backtester.run(
+            strategy=get_latest_strategy(),
+            stock_name=backtest_request.stock_name,
+        )
+    )
+
+
 @app.post("/backtest", response_model=BacktestResponse, status_code=200)
 async def run(
-    backtest_request: BacktestRequest, backtester: BacktestService = Depends()
+        backtest_request: BacktestRequest, backtester: BacktestService = Depends()
 ) -> BacktestResponse:
     save_to_python_file(strategy_code=backtest_request.strategy_code)
     return BacktestResponse.parse_obj(
@@ -67,7 +81,7 @@ async def run(
 
 @app.post("/get_data", response_model=DataResponse, status_code=200)
 async def get_data(
-    data_request: DataRequest, data_service: DataService = Depends()
+        data_request: DataRequest, data_service: DataService = Depends()
 ) -> DataResponse:
     return DataResponse.parse_obj(
         {
